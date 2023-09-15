@@ -13,15 +13,14 @@
     "plugin:prettier/recommended",
     "plugin:import/typescript",
     "prettier/@typescript-eslint",
-    "typescript",
-    "plugin:@typescript-eslint/recommended",
-    "prettier"
+    "plugin:@typescript-eslint/recommended"
   ],
   "plugins": [
     "jest",
     "security",
     "prettier",
-    "typescript"
+    "typescript",
+    "@typescript-eslint/eslint-plugin"
   ],
   "settings": {
     "import/extensions": [
@@ -40,11 +39,17 @@
   "parserOptions": {
     "ecmaVersion": 2018
   },
+  "ignorePatterns": [
+    ".eslintrc.js",
+    "jest.config.ts",
+    "*.spec.ts",
+    "*.test.ts",
+    "tests"
+  ],
   "rules": {
     "no-console": "error",
     "func-names": "off",
     "prettier/prettier": "error",
-    "consistent-return": "off",
     "jest/expect-expect": "off",
     "security/detect-object-injection": "off"
   }
