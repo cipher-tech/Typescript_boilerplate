@@ -13,24 +13,19 @@ async function main(App: (...args: any[]) => Express) {
 
     // run the following three before initializing App function
     await Env.validateEnv(envValidatorSchema);
-    //   await connectDB();
-    //   await configureSessionStore();
 
-    const logger = new Logger(App.name);
+    const logger = new Logger();
     // global.logger = logger;
-    logger.info("LKJKJKJk")
     const app = App();
-
+    
     const PORT = Env.get<number>('PORT') || 8080;
     const NODE_ENV = Env.get<string>('NODE_ENV');
+    logger.info(`Server started on port ${PORT} ....`)
 
     NODE_ENV !== AppEnv.PRODUCTION &&
         app.listen(PORT, () => {
             const NODE_ENV = Env.get<string>('NODE_ENV');
-
             NODE_ENV !== AppEnv.PRODUCTION && console.log(`[server]: Server is running at http://localhost:${ PORT }`);
         });
-
 }
-
 main(App);
