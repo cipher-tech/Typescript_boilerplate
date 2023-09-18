@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from 'express';
 import { AppEnv } from '../utils/enums';
 import Env from '../utils/env';
 import Swagger from '../config/swagger';
-import Router from "../routes"
+import { Router } from "../routes"
 import { ApiError } from "../utils/error"
 
 export default function App(): Express {
