@@ -31,11 +31,14 @@ export class ApiError extends Error {
      * @param {function} next express middleware next object
      */
     static appError(err: any, req: Request, res: Response, next: NextFunction) {
-        let { code } = err;
+        // error code
+        let { code, details } = err;
+
+        const status = "error";
+        
         if (err instanceof ZodError) {
             const { message } = err;
-            const status = 400;
-            code = 400;
+            code = StatusCodes.FORBIDDEN;
             logger.error(`
                 Zod validation error error:
                 status - ${ status }
@@ -46,18 +49,19 @@ export class ApiError extends Error {
                 Error Stack - ${ err.stack }
           `);
 
-            return res.status(code || StatusCodes.FORBIDDEN)
+            return res.status(code)
                 .json({
-                    message,
-                    status: code,
                     url: req.originalUrl,
-                    type: getReasonPhrase(code || StatusCodes.FORBIDDEN)
+                    message: "Validation error",
+                    status,
+                    type: getReasonPhrase(code),
+                    error: message
                 });
         }
         else if (code && typeof code === "number") {
             logger.error(`
             API error:
-            status - ${ code }
+            status - error
             message - ${ err.message } 
             url - ${ req.originalUrl } 
             method - ${ req.method } 
@@ -67,10 +71,11 @@ export class ApiError extends Error {
 
             return res.status(err.status || 500)
                 .json({
-                    message: err.message,
-                    status: code,
                     url: req.originalUrl,
-                    type: getReasonPhrase(code || 500)
+                    message: err.message,
+                    status,
+                    type: getReasonPhrase(code || 500),
+                    error: details
                 });
             // check if error is from Zod validator package
         } else {
